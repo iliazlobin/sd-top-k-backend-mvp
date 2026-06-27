@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 @dataclass
 class _Bucket:
     """A count bucket in the Stream-Summary linked list."""
+
     count: int
     items: set[str] = field(default_factory=set)
     prev: _Bucket | None = None
@@ -148,9 +149,7 @@ class SpaceSaving:
             bucket = bucket.prev
 
         # Sort by count desc, then by insertion time asc (LRU tie-break)
-        items.sort(
-            key=lambda x: (-x[1], self._insertion_time.get(x[0], 0))
-        )
+        items.sort(key=lambda x: (-x[1], self._insertion_time.get(x[0], 0)))
         return items[:k]
 
     def monitored_items(self) -> set[str]:
@@ -170,18 +169,10 @@ class SpaceSaving:
         """
         curr = self._head
         # Stop before tail sentinel (which has count=-1)
-        while (
-            curr.next_ is not None
-            and curr.next_ is not self._tail
-            and curr.next_.count < count
-        ):
+        while curr.next_ is not None and curr.next_ is not self._tail and curr.next_.count < count:
             curr = curr.next_
 
-        if (
-            curr.next_ is not None
-            and curr.next_ is not self._tail
-            and curr.next_.count == count
-        ):
+        if curr.next_ is not None and curr.next_ is not self._tail and curr.next_.count == count:
             return curr.next_
 
         # Create and insert after curr (which is either a real bucket or head)

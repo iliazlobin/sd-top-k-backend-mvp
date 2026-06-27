@@ -32,9 +32,7 @@ class CountMinSketch:
         self.width: int = math.ceil(math.e / epsilon)
 
         # 2D array: depth rows × width columns, all zeros
-        self._cells: list[list[int]] = [
-            [0] * self.width for _ in range(self.depth)
-        ]
+        self._cells: list[list[int]] = [[0] * self.width for _ in range(self.depth)]
 
     def increment(self, item: str, count: int = 1) -> None:
         """Add `count` to the frequency estimate of `item`."""
@@ -44,10 +42,7 @@ class CountMinSketch:
 
     def estimate(self, item: str) -> int:
         """Return the estimated count for `item` (guaranteed ≥ true count)."""
-        return min(
-            self._cells[row][self._hash(row, item)]
-            for row in range(self.depth)
-        )
+        return min(self._cells[row][self._hash(row, item)] for row in range(self.depth))
 
     def reset(self) -> None:
         """Zero out all cells. Used at minute boundary for oldest bucket."""
@@ -68,9 +63,7 @@ class CountMinSketch:
         result = CountMinSketch(self.epsilon, self.delta)
         for row in range(self.depth):
             for col in range(self.width):
-                result._cells[row][col] = (
-                    self._cells[row][col] + other._cells[row][col]
-                )
+                result._cells[row][col] = self._cells[row][col] + other._cells[row][col]
         return result
 
     def total_count(self) -> int:

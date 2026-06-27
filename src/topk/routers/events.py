@@ -81,8 +81,11 @@ async def ingest_events(
 
         valid_provided_ids.add(eid_str)
         event_map[eid_str] = (
-            eid, ev.item_id, ev.event_type.value,
-            ev.timestamp, ev.user_id,
+            eid,
+            ev.item_id,
+            ev.event_type.value,
+            ev.timestamp,
+            ev.user_id,
         )
 
     # 2. Batch-check PostgreSQL for existing event_ids (idempotency)

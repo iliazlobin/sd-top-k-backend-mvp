@@ -57,13 +57,9 @@ class TrendingService:
         self._bloom_error_rate = bloom_error_rate
 
         # Core algorithms
-        self.window = SlidingWindow(
-            num_buckets=60, epsilon=epsilon, delta=delta
-        )
+        self.window = SlidingWindow(num_buckets=60, epsilon=epsilon, delta=delta)
         self.space_saving = SpaceSaving(capacity=space_saving_capacity)
-        self.bloom = BloomFilter(
-            capacity=bloom_capacity, error_rate=bloom_error_rate
-        )
+        self.bloom = BloomFilter(capacity=bloom_capacity, error_rate=bloom_error_rate)
 
         # Blacklist — in-memory set, dual-written with PostgreSQL
         self.blacklist_set: set[str] = set()
@@ -183,9 +179,7 @@ class TrendingService:
         key = SORTED_SET_KEYS[cache_k]
         try:
             # ZREVRANGE returns members in descending score order
-            members = await self._redis.zrevrange(
-                key, 0, k - 1, withscores=True
-            )
+            members = await self._redis.zrevrange(key, 0, k - 1, withscores=True)
             if not members:
                 # Cache reachable but empty (cold start / post-reset): return an
                 # empty top-K with 200, not 503. 503 is reserved for genuine
@@ -200,11 +194,13 @@ class TrendingService:
 
             items = []
             for rank_zero, (item_id, score) in enumerate(members):
-                items.append({
-                    "item_id": item_id,
-                    "count": int(score),
-                    "rank": rank_zero + 1,
-                })
+                items.append(
+                    {
+                        "item_id": item_id,
+                        "count": int(score),
+                        "rank": rank_zero + 1,
+                    }
+                )
 
             return {
                 "items": items,
@@ -237,13 +233,9 @@ class TrendingService:
         and clears the blacklist set. Redis keys are NOT cleared
         (use reset_redis() for that).
         """
-        self.window = SlidingWindow(
-            num_buckets=60, epsilon=self._epsilon, delta=self._delta
-        )
+        self.window = SlidingWindow(num_buckets=60, epsilon=self._epsilon, delta=self._delta)
         self.space_saving = SpaceSaving(capacity=self._space_saving_capacity)
-        self.bloom = BloomFilter(
-            capacity=self._bloom_capacity, error_rate=self._bloom_error_rate
-        )
+        self.bloom = BloomFilter(capacity=self._bloom_capacity, error_rate=self._bloom_error_rate)
         self.blacklist_set.clear()
 
     async def reset_redis(self) -> None:

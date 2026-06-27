@@ -31,9 +31,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 async def get_trending_service(request: Request) -> TrendingService:
     """FastAPI dependency: return the TrendingService from app state."""
-    svc: TrendingService | None = getattr(
-        request.app.state, "trending_service", None
-    )
+    svc: TrendingService | None = getattr(request.app.state, "trending_service", None)
     if svc is None:
         raise RuntimeError("TrendingService not initialized")
     return svc
@@ -115,7 +113,7 @@ async def remove_blacklist(
         # Remove from PostgreSQL
         stmt = delete(Blacklist).where(Blacklist.item_id == item_id)
         result = await db.execute(stmt)
-        pg_rows = result.rowcount if hasattr(result, 'rowcount') else 0
+        pg_rows = result.rowcount if hasattr(result, "rowcount") else 0
 
         if was_present or pg_rows > 0:
             removed += 1

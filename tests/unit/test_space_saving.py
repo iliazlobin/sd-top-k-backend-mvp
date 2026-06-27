@@ -144,7 +144,7 @@ class TestSpaceSavingCapacity:
         ss = SpaceSaving(capacity=3)
         ss.increment("a", count=10)  # heavy
         ss.increment("b", count=5)
-        ss.increment("c", count=1)   # light — will be evicted
+        ss.increment("c", count=1)  # light — will be evicted
 
         # Now add a new item — should evict "c" (count=1)
         ss.increment("d")

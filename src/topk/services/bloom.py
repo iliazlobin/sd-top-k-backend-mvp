@@ -30,9 +30,7 @@ class BloomFilter:
         error_rate: float = 0.001,
     ) -> None:
         # m = -n * ln(p) / (ln 2)^2
-        m = int(
-            -capacity * math.log(error_rate) / (math.log(2) ** 2)
-        )
+        m = int(-capacity * math.log(error_rate) / (math.log(2) ** 2))
         # k = (m / n) * ln(2)
         k = max(1, int((m / capacity) * math.log(2)))
 
@@ -51,7 +49,7 @@ class BloomFilter:
             bit = self._hash(seed, key)
             byte_idx = bit // 8
             bit_idx = bit % 8
-            self._bits[byte_idx] |= (1 << bit_idx)
+            self._bits[byte_idx] |= 1 << bit_idx
 
     def contains(self, key: str) -> bool:
         """Test whether `key` is in the Bloom filter.

@@ -22,9 +22,7 @@ class _BodyCapableClient(httpx.Client):
 
     def delete(self, url, *, json=None, content=None, data=None, **kwargs):
         if json is not None or content is not None or data is not None:
-            return self.request(
-                "DELETE", url, json=json, content=content, data=data, **kwargs
-            )
+            return self.request("DELETE", url, json=json, content=content, data=data, **kwargs)
         return super().delete(url, **kwargs)
 
 
@@ -42,8 +40,9 @@ def client(base_url):
 
 def assert_json_200(r, expected_status=200):
     """Assert status and return parsed JSON."""
-    assert r.status_code == expected_status, \
+    assert r.status_code == expected_status, (
         f"Expected {expected_status}, got {r.status_code}: {r.text}"
+    )
     return r.json()
 
 

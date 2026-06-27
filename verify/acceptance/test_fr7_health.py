@@ -21,10 +21,8 @@ def test_healthz_returns_healthy(client):
 def test_healthz_connections_are_connected(client):
     """Redis and postgres should report 'connected'."""
     resp = assert_json_200(client.get("/healthz"))
-    assert resp["postgres"] == "connected", \
-        f"Postgres should be connected, got {resp['postgres']}"
-    assert resp["redis"] == "connected", \
-        f"Redis should be connected, got {resp['redis']}"
+    assert resp["postgres"] == "connected", f"Postgres should be connected, got {resp['postgres']}"
+    assert resp["redis"] == "connected", f"Redis should be connected, got {resp['redis']}"
 
 
 def test_healthz_no_auth_required(client):

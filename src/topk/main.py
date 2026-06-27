@@ -48,8 +48,7 @@ def _run_migrations() -> None:
 
     if alembic_ini is None:
         logger.warning(
-            "alembic.ini not found — skipping migrations; "
-            "the database schema must already exist"
+            "alembic.ini not found — skipping migrations; the database schema must already exist"
         )
         return
 
@@ -125,9 +124,7 @@ def create_app() -> FastAPI:
         # Load blacklist from PostgreSQL
         try:
             async with engine.connect() as conn:
-                result = await conn.execute(
-                    text("SELECT item_id FROM blacklist")
-                )
+                result = await conn.execute(text("SELECT item_id FROM blacklist"))
                 for row in result.fetchall():
                     trending_service.blacklist_set.add(row[0])
             logger.info(
@@ -135,9 +132,7 @@ def create_app() -> FastAPI:
                 len(trending_service.blacklist_set),
             )
         except Exception:
-            logger.warning(
-                "Could not load blacklist from PostgreSQL — starting with empty set"
-            )
+            logger.warning("Could not load blacklist from PostgreSQL — starting with empty set")
 
         # Wire Redis into TrendingService
         trending_service.redis = redis_client
@@ -148,9 +143,7 @@ def create_app() -> FastAPI:
         app.state.trending_service = trending_service
 
         # Start background refresh task
-        refresh_task = asyncio.create_task(
-            _refresh_loop(trending_service)
-        )
+        refresh_task = asyncio.create_task(_refresh_loop(trending_service))
 
         yield
 

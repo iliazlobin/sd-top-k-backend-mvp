@@ -26,8 +26,12 @@ def upgrade() -> None:
         sa.Column("user_id", sa.Text(), nullable=True),
         sa.Column("event_type", sa.Text(), nullable=False),
         sa.Column("timestamp", sa.BigInteger(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                  server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.PrimaryKeyConstraint("event_id"),
     )
     op.create_index("idx_events_item", "events", ["item_id"])
@@ -35,8 +39,12 @@ def upgrade() -> None:
     op.create_table(
         "blacklist",
         sa.Column("item_id", sa.Text(), nullable=False),
-        sa.Column("created_at", sa.DateTime(timezone=True), nullable=False,
-                  server_default=sa.text("now()")),
+        sa.Column(
+            "created_at",
+            sa.DateTime(timezone=True),
+            nullable=False,
+            server_default=sa.text("now()"),
+        ),
         sa.PrimaryKeyConstraint("item_id"),
     )
 

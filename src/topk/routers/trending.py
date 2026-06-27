@@ -19,9 +19,7 @@ router = APIRouter(tags=["trending"])
 
 async def get_trending_service(request: Request) -> TrendingService:
     """FastAPI dependency: return the TrendingService from app state."""
-    svc: TrendingService | None = getattr(
-        request.app.state, "trending_service", None
-    )
+    svc: TrendingService | None = getattr(request.app.state, "trending_service", None)
     if svc is None:
         raise RuntimeError("TrendingService not initialized")
     return svc

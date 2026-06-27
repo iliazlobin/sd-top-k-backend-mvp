@@ -11,8 +11,10 @@ from verify.acceptance.conftest import assert_202, assert_json_200, assert_422, 
 def test_trending_valid_k_returns_200(client):
     """GET /trending with valid k → 200 with items."""
     # Seed some events so the cache is populated
-    events = [{"item_id": f"k_test_{i}", "event_type": "view",
-               "timestamp": 1719876543000 + i} for i in range(15)]
+    events = [
+        {"item_id": f"k_test_{i}", "event_type": "view", "timestamp": 1719876543000 + i}
+        for i in range(15)
+    ]
     assert_202(client.post("/events", json={"events": events}))
 
     resp = assert_json_200(client.get("/trending", params={"window": "1h", "k": 10}))
@@ -52,5 +54,4 @@ def test_trending_missing_k_default_or_422(client):
     """Missing k → either 422 or default behavior. Test for graceful handling."""
     r = client.get("/trending", params={"window": "1h"})
     # Either 422 (strict) or 200 with default k
-    assert r.status_code in (200, 422), \
-        f"Expected 200 or 422, got {r.status_code}: {r.text}"
+    assert r.status_code in (200, 422), f"Expected 200 or 422, got {r.status_code}: {r.text}"

@@ -113,7 +113,7 @@ class TestCountMinSketchMerge:
 
     def test_merge_different_dimensions_raises(self):
         cms1 = CountMinSketch(epsilon=0.01, delta=0.001)  # 7×272
-        cms2 = CountMinSketch(epsilon=0.1, delta=0.1)     # different
+        cms2 = CountMinSketch(epsilon=0.1, delta=0.1)  # different
 
         with pytest.raises(ValueError, match="different dimensions"):
             cms1.merge(cms2)

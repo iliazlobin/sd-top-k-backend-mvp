@@ -69,7 +69,7 @@ class TestBloomFilterAddContains:
 
         # With p=0.01 and only 10% full, FPR should be very low
         # but we allow some margin since hash distribution is approximate
-        # Actually with 100/1000 load, expected FPR ≈ 0.01^(100/1000) bit, 
+        # Actually with 100/1000 load, expected FPR ≈ 0.01^(100/1000) bit,
         # the actual FPR is (1 - e^(-kn/m))^k. Let's be generous.
         rate = false_positives / 1000
         assert rate < 0.15, f"False positive rate too high: {rate:.2%}"

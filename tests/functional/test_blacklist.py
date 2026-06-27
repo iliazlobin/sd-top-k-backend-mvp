@@ -56,14 +56,16 @@ class TestBlacklistEffectOnPipeline:
     def test_blacklisted_excluded_from_space_saving(self, svc):
         svc.blacklist_set.add("evil")
         svc.process_event(
-            item_id="evil", event_type="view",
+            item_id="evil",
+            event_type="view",
             timestamp_ms=1719876543000,
         )
         assert "evil" not in svc.space_saving.monitored_items()
 
     def test_not_blacklisted_included(self, svc):
         svc.process_event(
-            item_id="good", event_type="view",
+            item_id="good",
+            event_type="view",
             timestamp_ms=1719876543000,
         )
         assert "good" in svc.space_saving.monitored_items()
@@ -72,14 +74,16 @@ class TestBlacklistEffectOnPipeline:
         # Blacklist, then remove, then event should re-enter SS
         svc.blacklist_set.add("rehab")
         svc.process_event(
-            item_id="rehab", event_type="view",
+            item_id="rehab",
+            event_type="view",
             timestamp_ms=1719876543000,
         )
         assert "rehab" not in svc.space_saving.monitored_items()
 
         svc.blacklist_set.discard("rehab")
         svc.process_event(
-            item_id="rehab", event_type="click",
+            item_id="rehab",
+            event_type="click",
             timestamp_ms=1719876543000 + 100,
         )
         assert "rehab" in svc.space_saving.monitored_items()

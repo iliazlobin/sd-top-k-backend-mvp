@@ -9,14 +9,19 @@ from verify.acceptance.conftest import assert_202, assert_json_200, assert_422
 
 def test_count_known_item(client):
     """Feed events for item 'known_item', then GET /count returns count > 0."""
-    assert_202(client.post("/events", json={
-        "events": [{"item_id": "known_item", "event_type": "click",
-                     "timestamp": 1719876543000 + i} for i in range(50)]
-    }))
+    assert_202(
+        client.post(
+            "/events",
+            json={
+                "events": [
+                    {"item_id": "known_item", "event_type": "click", "timestamp": 1719876543000 + i}
+                    for i in range(50)
+                ]
+            },
+        )
+    )
 
-    resp = assert_json_200(client.get("/count", params={
-        "item_id": "known_item", "window": "1h"
-    }))
+    resp = assert_json_200(client.get("/count", params={"item_id": "known_item", "window": "1h"}))
     assert resp["item_id"] == "known_item"
     assert resp["window"] == "1h"
     assert resp["count"] >= 50, f"CMS estimate ≥ 50, got {resp['count']}"
@@ -25,9 +30,9 @@ def test_count_known_item(client):
 
 def test_count_nonexistent_item_returns_zero(client):
     """Unknown item returns count=0, is_approximate=true."""
-    resp = assert_json_200(client.get("/count", params={
-        "item_id": "definitely_not_here_xyz", "window": "1h"
-    }))
+    resp = assert_json_200(
+        client.get("/count", params={"item_id": "definitely_not_here_xyz", "window": "1h"})
+    )
     assert resp["item_id"] == "definitely_not_here_xyz"
     assert resp["count"] == 0
     assert resp["is_approximate"] is True
