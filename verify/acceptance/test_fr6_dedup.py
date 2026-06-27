@@ -61,9 +61,9 @@ def test_dedup_same_user_item_minute(client):
     assert count_resp["count"] >= 1, f"Expected ≥1, got {count_resp['count']}"
     # CMS overcount is at most εN = 0.01 * 1 = 0.01 → floor 1. So count ≤ 2
     # with high probability. Assert it's not double.
-    assert count_resp["count"] < 5, (
-        f"Dedup should prevent large overcount, got {count_resp['count']}"
-    )
+    assert (
+        count_resp["count"] < 5
+    ), f"Dedup should prevent large overcount, got {count_resp['count']}"
 
 
 def test_dedup_different_users_counted(client):
@@ -104,9 +104,9 @@ def test_dedup_different_users_counted(client):
     count_resp = assert_json_200(
         client.get("/count", params={"item_id": "multi_user", "window": "1h"})
     )
-    assert count_resp["count"] >= 2, (
-        f"Different users should both be counted, got {count_resp['count']}"
-    )
+    assert (
+        count_resp["count"] >= 2
+    ), f"Different users should both be counted, got {count_resp['count']}"
 
 
 def test_dedup_same_user_different_items_counted(client):
@@ -163,6 +163,6 @@ def test_dedup_without_user_id_no_dedup(client):
     count_resp = assert_json_200(
         client.get("/count", params={"item_id": "no_user", "window": "1h"})
     )
-    assert count_resp["count"] >= 2, (
-        f"Without user_id, both events should be counted, got {count_resp['count']}"
-    )
+    assert (
+        count_resp["count"] >= 2
+    ), f"Without user_id, both events should be counted, got {count_resp['count']}"

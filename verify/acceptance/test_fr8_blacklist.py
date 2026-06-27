@@ -70,9 +70,9 @@ def test_blacklisted_item_excluded_from_trending(client):
     count_resp = assert_json_200(
         client.get("/count", params={"item_id": "bad_item", "window": "1h"})
     )
-    assert count_resp["count"] >= 200, (
-        f"Blacklisted items still counted in CMS: expected ≥200, got {count_resp['count']}"
-    )
+    assert (
+        count_resp["count"] >= 200
+    ), f"Blacklisted items still counted in CMS: expected ≥200, got {count_resp['count']}"
 
 
 def test_blacklist_remove_item(client):
@@ -99,9 +99,9 @@ def test_blacklist_remove_item(client):
     # Should now appear in trending
     trending = assert_json_200(client.get("/trending", params={"window": "1h", "k": 10}))
     item_ids = {item["item_id"] for item in trending["items"]}
-    assert "temp_spam" in item_ids, (
-        f"After removal from blacklist, temp_spam should be in trending: {item_ids}"
-    )
+    assert (
+        "temp_spam" in item_ids
+    ), f"After removal from blacklist, temp_spam should be in trending: {item_ids}"
 
 
 def test_blacklist_delete_idempotent(client):
