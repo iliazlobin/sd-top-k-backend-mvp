@@ -4,7 +4,7 @@ After feeding N events for item X, GET /count returns count ≥ N (CMS overcount
 Unknown item returns count = 0.
 """
 
-from verify.acceptance.conftest import assert_202, assert_json_200, assert_422
+from verify.acceptance.conftest import assert_202, assert_422, assert_json_200
 
 
 def test_cms_count_known_item(client):

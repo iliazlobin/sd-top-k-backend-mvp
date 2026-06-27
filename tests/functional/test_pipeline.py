@@ -10,13 +10,17 @@ tests only check Pydantic schemas and don't need DB).
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from httpx import ASGITransport, AsyncClient
 
+from topk.models.schemas import (
+    BlacklistAddRequest,
+    EventIn,
+    EventsRequest,
+    EventType,
+)
 from topk.services.trending import TrendingService
-
 
 # ── Helpers ────────────────────────────────────────────────────
 
@@ -169,13 +173,6 @@ class TestTrendingServicePipeline:
 
 
 # ── Pydantic Validation Tests (no app needed) ──────────────────
-
-from topk.models.schemas import (
-    EventIn,
-    EventsRequest,
-    EventType,
-    BlacklistAddRequest,
-)
 
 
 class TestPydanticValidation:

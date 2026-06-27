@@ -4,7 +4,7 @@ GET /count?item_id=X&window=1h → returns CMS estimate with is_approximate=true
 Unknown item → count=0. Missing item_id → 422. Invalid window → 422.
 """
 
-from verify.acceptance.conftest import assert_202, assert_json_200, assert_422
+from verify.acceptance.conftest import assert_202, assert_422, assert_json_200
 
 
 def test_count_known_item(client):

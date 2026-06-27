@@ -5,6 +5,7 @@ Database-dependent tests are in verify/acceptance/.
 """
 
 import pytest
+
 from topk.services.trending import TrendingService
 
 

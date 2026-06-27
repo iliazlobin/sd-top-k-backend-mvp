@@ -7,8 +7,8 @@ PostgreSQL persistence → 202 response.
 
 from __future__ import annotations
 
-import uuid
 import logging
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, Request
@@ -18,7 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from topk.db import get_db
 from topk.models.event import Event
-from topk.models.schemas import EventType, EventsRequest, EventsResponse
+from topk.models.schemas import EventsRequest, EventsResponse
 from topk.services.trending import TrendingService
 
 logger = logging.getLogger(__name__)

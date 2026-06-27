@@ -5,7 +5,7 @@ Invalid k → 422. Invalid window → 422.
 Redis stale/missing → 503 (graceful degradation).
 """
 
-from verify.acceptance.conftest import assert_202, assert_json_200, assert_422, assert_503
+from verify.acceptance.conftest import assert_202, assert_422, assert_json_200
 
 
 def test_trending_valid_k_returns_200(client):

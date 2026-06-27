@@ -4,6 +4,7 @@ Tests increment, estimate, merge, reset, and the ε-δ guarantees.
 """
 
 import pytest
+
 from topk.services.cms import CountMinSketch
 
 

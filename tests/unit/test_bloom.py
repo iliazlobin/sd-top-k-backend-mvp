@@ -3,7 +3,6 @@
 Tests add, contains, reset, and false-positive rate behavior.
 """
 
-import pytest
 from topk.services.bloom import BloomFilter
 
 

@@ -6,7 +6,7 @@ GET /admin/blacklist lists blocked items.
 DELETE /admin/blacklist removes items.
 """
 
-from verify.acceptance.conftest import assert_201, assert_202, assert_json_200, assert_422
+from verify.acceptance.conftest import assert_201, assert_202, assert_422, assert_json_200
 
 
 def test_blacklist_add_and_list(client):

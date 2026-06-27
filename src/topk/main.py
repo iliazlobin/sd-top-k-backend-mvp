@@ -16,7 +16,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from topk.config import settings
-from topk.db import create_engine, create_session_factory
+from topk.db import create_engine
 from topk.redis import create_redis_client
 from topk.routers import admin, events, health, trending
 from topk.services.trending import TrendingService

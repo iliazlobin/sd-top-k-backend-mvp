@@ -10,7 +10,6 @@ Rebuilt at each minute boundary (reset clears all bits).
 from __future__ import annotations
 
 import math
-import struct
 
 
 class BloomFilter:

@@ -1,17 +1,17 @@
 """Pydantic request/response schemas for the Top-K API."""
 
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     view = "view"
     click = "click"
     mention = "mention"
 
 
-class WindowSize(str, Enum):
+class WindowSize(StrEnum):
     one_hour = "1h"
 
 

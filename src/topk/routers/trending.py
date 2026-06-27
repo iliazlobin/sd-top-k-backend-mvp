@@ -11,7 +11,7 @@ from typing import Any
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import JSONResponse
 
-from topk.models.schemas import CountResponse, TrendingResponse, WindowSize
+from topk.models.schemas import CountResponse, TrendingResponse
 from topk.services.trending import TrendingService
 
 router = APIRouter(tags=["trending"])

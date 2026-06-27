@@ -5,9 +5,9 @@ via HTTP at API_BASE_URL.
 """
 
 import os
-import pytest
-import httpx
 
+import httpx
+import pytest
 
 API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000")
 

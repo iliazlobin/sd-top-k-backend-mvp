@@ -6,6 +6,7 @@ Idempotency: duplicate event_id → no double-count.
 """
 
 import pytest
+
 from verify.acceptance.conftest import assert_202, assert_422
 
 

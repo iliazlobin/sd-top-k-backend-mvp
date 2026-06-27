@@ -9,7 +9,6 @@ Uses in-process state only — no Redis, no persistence.
 
 from __future__ import annotations
 
-import math
 import time
 
 from topk.services.cms import CountMinSketch

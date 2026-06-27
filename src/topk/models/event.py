@@ -1,7 +1,7 @@
 """SQLAlchemy ORM models for events and blacklist."""
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import BigInteger, DateTime, Index, Text
 from sqlalchemy.dialects.postgresql import UUID
@@ -24,7 +24,7 @@ class Event(Base):
     timestamp: Mapped[int] = mapped_column(BigInteger, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
     )
 
     __table_args__ = (Index("idx_events_item", "item_id"),)
@@ -36,5 +36,5 @@ class Blacklist(Base):
     item_id: Mapped[str] = mapped_column(Text, primary_key=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
+        default=lambda: datetime.now(UTC),
     )
