@@ -257,10 +257,11 @@ class TestTrendingServiceRedis:
         trending_service.redis.zadd.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_get_trending_returns_none_when_empty(self, trending_service):
+    async def test_get_trending_returns_empty_when_empty(self, trending_service):
         trending_service.redis.zrevrange = AsyncMock(return_value=[])
         result = await trending_service.get_trending(k=10)
-        assert result is None
+        assert result is not None
+        assert result['items'] == []
 
     @pytest.mark.asyncio
     async def test_get_trending_returns_none_when_no_redis(self, trending_service):
