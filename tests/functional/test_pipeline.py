@@ -261,7 +261,7 @@ class TestTrendingServiceRedis:
         trending_service.redis.zrevrange = AsyncMock(return_value=[])
         result = await trending_service.get_trending(k=10)
         assert result is not None
-        assert result['items'] == []
+        assert result["items"] == []
 
     @pytest.mark.asyncio
     async def test_get_trending_returns_none_when_no_redis(self, trending_service):
