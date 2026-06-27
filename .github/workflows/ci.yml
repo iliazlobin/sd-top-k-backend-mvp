@@ -34,7 +34,7 @@ jobs:
           - 6379:6379
     env:
       DATABASE_URL: postgresql+asyncpg://topk:topk@localhost:5432/topk
-      REDIS_URL: redis://localhost:6379/0
+      REDIS_URL: redis://localhost:***@v4
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -52,22 +52,32 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install ".[dev]"
-      - run: |
-          set -a
-          . verify/manifest.env
-          set +a
-          eval "$UP"
+      - name: Debug e2e
+        run: |
+          echo "=== Checking docker compose ==="
+          which docker-compose || echo "docker-compose not found"
+          docker compose version || echo "docker compose not found"
+          echo "=== Checking pytest ==="
+          which pytest || echo "pytest not found"
+          pytest --version || echo "pytest not available"
+          echo "=== Checking curl ==="
+          which curl || echo "curl not found"
+          echo "=== Running docker compose up ==="
+          docker compose up -d --build 2>&1 || docker-compose up -d --build 2>&1
+          echo "=== Waiting for app ==="
           for i in $(seq 1 60); do
-            if eval "$READY" 2>/dev/null; then
+            if curl -s http://localhost:8010/healthz 2>/dev/null; then
               echo "App ready after ${i}s"
               break
             fi
             sleep 1
           done
-          API_BASE_URL="http://localhost:${PORT:-8010}" eval "$ACCEPTANCE"
+          echo "=== Running acceptance tests ==="
+          API_BASE_URL="http://localhost:8010" pytest verify/acceptance/ -v
         env:
           APP_PORT: "8010"
-      - run: eval "$DOWN"
+      - name: Cleanup
+        run: docker compose down -v 2>&1 || docker-compose down -v 2>&1
         if: always()
         env:
           APP_PORT: "8010"
