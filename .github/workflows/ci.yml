@@ -52,19 +52,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install ".[dev]"
-      - name: Debug e2e
-        run: |
-          echo "=== Checking docker compose ==="
-          which docker-compose || echo "docker-compose not found"
-          docker compose version || echo "docker compose not found"
-          echo "=== Checking pytest ==="
-          which pytest || echo "pytest not found"
-          pytest --version || echo "pytest not available"
-          echo "=== Checking curl ==="
-          which curl || echo "curl not found"
-          echo "=== Running docker compose up ==="
+      - run: |
           docker compose up -d --build 2>&1 || docker-compose up -d --build 2>&1
-          echo "=== Waiting for app ==="
           for i in $(seq 1 60); do
             if curl -s http://localhost:8010/healthz 2>/dev/null; then
               echo "App ready after ${i}s"
@@ -72,12 +61,10 @@ jobs:
             fi
             sleep 1
           done
-          echo "=== Running acceptance tests ==="
           API_BASE_URL="http://localhost:8010" pytest verify/acceptance/ -v
         env:
           APP_PORT: "8010"
-      - name: Cleanup
-        run: docker compose down -v 2>&1 || docker-compose down -v 2>&1
+      - run: docker compose down -v 2>&1 || docker-compose down -v 2>&1
         if: always()
         env:
           APP_PORT: "8010"
