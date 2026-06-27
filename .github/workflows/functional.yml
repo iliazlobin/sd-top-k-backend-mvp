@@ -1,0 +1,45 @@
+name: Functional Tests
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 13 * * *"
+
+jobs:
+  functional:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: topk
+          POSTGRES_PASSWORD: topk
+          POSTGRES_DB: topk
+        options: >-
+          --health-cmd "pg_isready -U topk"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: postgresql+asyncpg://topk:topk@localhost:5432/topk
+      REDIS_URL: redis://localhost:6379/0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ".[dev]"
+      - run: alembic upgrade head
+      - run: pytest tests/functional/ -v

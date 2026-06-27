@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 13 * * *"
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: topk
+          POSTGRES_PASSWORD: topk
+          POSTGRES_DB: topk
+        options: >-
+          --health-cmd "pg_isready -U topk"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: postgresql+asyncpg://topk:topk@localhost:5432/topk
+      REDIS_URL: redis://localhost:6379/0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ".[dev]"
+      - run: alembic upgrade head
+      - run: pytest tests/unit/ -v
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -a
+          . verify/manifest.env
+          set +a
+          eval "$UP"
+          for i in $(seq 1 60); do
+            if eval "$READY" 2>/dev/null; then
+              echo "App ready after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+          API_BASE_URL="http://localhost:${PORT:-8010}" eval "$ACCEPTANCE"
+        env:
+          APP_PORT: "8010"
+      - run: eval "$DOWN"
+        if: always()
+        env:
+          APP_PORT: "8010"
