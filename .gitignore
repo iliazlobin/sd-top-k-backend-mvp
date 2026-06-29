@@ -10,3 +10,5 @@ verify/.venv/
 build/
 dist/
 *.log
+*.rdb
+dump.rdb
